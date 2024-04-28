@@ -7,22 +7,22 @@ class Text;
 
 struct SDL_Color;
 class TextObject : public GameObject {
-public: 
+public:
 	TextObject(const char* FilePath = "Content/Fonts/Pixelify/PixelifySans-Regular.ttf");
 
 	void SetText(const char* NewText);
 
 	void SetFontSize(int NewSize);
 
-	void SetFontColour(uint8_t r, uint8_t g, uint8_t b, uint8_t a );
+	void SetFontColour(uint8_t r, uint8_t g, uint8_t b, uint8_t a);
 
 	void SetAlignment(EAligment NewAlignment);
-protected: 
+protected:
 	virtual void OnUpdate(float DeltaTime) override;
 
 	virtual void Cleanup() override;
 
-private: 
+private:
 	Text* m_Text;
 
 

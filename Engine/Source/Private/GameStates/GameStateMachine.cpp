@@ -8,7 +8,14 @@ GameStateMachine::GameStateMachine(GameState* DefaultGameState)
 
 GameState* GameStateMachine::GetActiveGameState() const
 {
-	return m_ActiveGameStateStack.back();
+	//	return m_ActiveGameStateStack.back();
+
+	if (m_ActiveGameStateStack.size() > 0) {
+		return m_ActiveGameStateStack.back();
+	}
+	else {
+		nullptr;
+	}
 }
 
 void GameStateMachine::Cleanup()
@@ -39,7 +46,7 @@ void GameStateMachine::SetNewGameState(GameState* NewGameState, bool IsAdditive)
 		m_PandingGameStateStack.push_back(NewGameState);
 	}
 
-	
+
 
 }
 
@@ -49,7 +56,7 @@ void GameStateMachine::GarbageCollection()
 	GetActiveGameState()->GarbageCollection();
 	if (m_ActiveGameStateStack.size() < 1) {
 		return;
-	
+
 	}
 
 	std::erase_if(m_ActiveGameStateStack,

@@ -1,5 +1,6 @@
 #pragma once
 #include<EngineTypes.h>
+#include "GameObjects/TextObject.h"
 //forward decleation
 struct SDL_Window;
 struct SDL_Renderer;
@@ -19,9 +20,20 @@ public:
 	static void DestroyGame();
 
 	//Run the Game
-	void Run()  {Initialise(); }
+	void Run() { Initialise(); }
 	//Exit APP 
 	void QuitApp() { m_IsGameOpen = false; }
+
+	void SetGameOver(bool flag) { m_IsGameOver = flag; }
+	bool GetGameOver() const { return m_IsGameOver; }
+
+	void SetRestart(bool flag) { m_IsGameRestart = flag; }
+	bool GetRestart() const { return m_IsGameRestart; }
+
+	void SetHitCount() { m_HitCount++; }
+	int GetHitCount() const { return m_HitCount; }
+	void ClearHitCount() { m_HitCount = 0; }
+
 
 	//Import a texture to the game 
 	Texture* ImportTexture(const char* PathToFile);
@@ -34,7 +46,7 @@ public:
 	void DestroyText(Text* TextToDestroy);
 
 	GameStateMachine* GetGameStateMachine() const { return m_GameStateMachine; }
-	
+
 	int WindowWidth() const;
 
 	int WindowHeight() const;
@@ -45,8 +57,7 @@ public:
 
 	void RestartGame();
 
-	WinMenu* GetWinMenu() const { return m_WinMenu;  }
-
+	WinMenu* GetWinMenu() const { return m_WinMenu; }
 
 
 private:
@@ -94,28 +105,53 @@ private:
 	//Any object that are marked for delete will be deallocated from memory here 
 	void CollectGarbage();
 
+	// Display Main Menu
+	void DispMainMenu();
+
+	// Check start by user
+	void CheckStart();
+
+	// Check game over
+	void CheckGameOver();
+
+	// Check restart by user
+	void CheckReStart();
 
 
-	private :
-		// flag that decides when the game loop ends 
-		bool m_IsGameOpen;
+private:
+	// flag that decides when the game loop ends 
+	bool m_IsGameOpen;
 
+	// flag indicating game start
+	bool m_IsGameStart;
 
-		//stores the window for the app/game
-		SDL_Window* m_WindowRef;
-		//stores the renderer for the sdl window
-		SDL_Renderer* m_RendererRef;
+	// flag indicating whether the game is over
+	bool m_IsGameOver;
 
-		//store all of the texture in the game 
-		TArray<Texture*> m_TextureStack;
-		 
-		TArray<Text*> m_TextStack;
+	// flag indicating game restart
+	bool m_IsGameRestart;
 
-		//store the input for the game 
-		Input* m_GameInput; 
+	TextObject* m_GameOverText;
 
-		GameStateMachine* m_GameStateMachine;
+	// missile hit count to enemy
+	int m_HitCount;
 
-		WinMenu* m_WinMenu;
-	
+	//stores the window for the app/game
+	SDL_Window* m_WindowRef;
+	//stores the renderer for the sdl window
+	SDL_Renderer* m_RendererRef;
+
+	//store all of the texture in the game 
+	TArray<Texture*> m_TextureStack;
+
+	TArray<Text*> m_TextStack;
+
+	//store the input for the game 
+	Input* m_GameInput;
+
+	GameStateMachine* m_GameStateMachine;
+
+	TextObject* m_MainMenuText;
+
+	WinMenu* m_WinMenu;
 };

@@ -1,6 +1,7 @@
 #include "GameObjects/Player.h"
 #include "Input.h"
 #include "GameObjects/Enemy.h"
+#include "Game.h"
 
 
 #define Super Charactor 
@@ -9,12 +10,14 @@
 
 Player::Player()
 {
-	m_MaxSpeed  = 600.0f; 
+	m_MaxSpeed = 600.0f;
 	m_Deceleration = 5.0f;
 	m_AccelerationSpeed = 5000.0f;
 	m_Scale = 3.0f;
 	m_Size = 48.0f - 16.0f;
 	m_IsSpaceKeyPressed = false;
+	m_IsEnterKeyPressed = false;
+	m_CollisionEnemy = false;
 
 	AddSprite(
 		"Content/Sprites/Main Ship/MAin Ship - Engines/PNGs/Main Ship - Engines - Supercharged Engine.png"
@@ -48,9 +51,9 @@ Player::Player()
 
 	SetScale(m_Scale);
 
-	Bounds* PlayerBounds = AddBounds( 0, ScaleSize());
+	Bounds* PlayerBounds = AddBounds(0, ScaleSize());
 	PlayerBounds->m_OriginalOffset = -ScaleHalfSize();
-	
+
 }
 
 
@@ -74,6 +77,7 @@ void Player::OnProcessInput(Input* GameInput)
 	if (GameInput->IsKeyDown(EE_KEY_SPACE)) {
 		m_IsSpaceKeyPressed = true;
 	}
+
 }
 
 
@@ -104,6 +108,6 @@ void Player::SetPoweredEngines(bool Powered)
 void Player::OnOverlapEnter(Bounds* OverlapBoudns, Bounds* HitBounds)
 {
 	if (dynamic_cast<Enemy*>(OverlapBoudns->GetOwner())) {
-		OverlapBoudns->GetOwner()->DestreyObject();
+		Game::GetGame()->SetGameOver(true);
 	}
 }

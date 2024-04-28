@@ -18,17 +18,18 @@
 
 #define Super GameState 
 
-std::default_random_engine RandGenerator; 
+std::default_random_engine RandGenerator;
 
 PlayState::PlayState() :
-m_ScoreText(nullptr),
-m_Score(0),
-m_FreqText(nullptr),
-m_Player(nullptr),
-m_Missile(nullptr),
-m_EnemyFrequency(3.0f),
-m_EnemySpawnTimer(5.0f),
-m_MissileSpawnTimer(0.0f)
+	m_ScoreText(nullptr),
+	m_Score(0),
+	m_FreqText(nullptr),
+	//m_GameOverText(nullptr),
+	m_Player(nullptr),
+	m_Missile(nullptr),
+	m_EnemyFrequency(3.0f),
+	m_EnemySpawnTimer(5.0f),
+	m_MissileSpawnTimer(0.0f)
 {}
 
 void PlayState::OnStart()
@@ -36,24 +37,7 @@ void PlayState::OnStart()
 	Super::OnStart();
 
 	m_Player = AddGameObject<Player>();
-//	Player* P = AddGameObject<Player>();
-//	P->SetPosition({ Game::GetGame()->WindowWidth()/ 2.0f, Game::GetGame()->WindowHeightF() - P->ScaleHalfSize()});
-	m_Player->SetPosition({ Game::GetGame()->WindowWidth()/ 2.0f, Game::GetGame()->WindowHeightF() - m_Player->ScaleHalfSize()});
-
-
-#if 0	// Test
-	// Playerの真上にミサイルを表示させてみる
-	 
-	// テスト的にEnemyクラスでやってみる
-	Missile* E = AddGameObject<Missile>();
-	// テスト的にPlayerの真上に出す
-//	M->SetPosition({ P->GetTransform().Position.x, P->GetTransform().Position.y - P->ScaleSize()});
-//	E->SetPosition({ P->GetTransform().Position.x, P->GetTransform().Position.y - 100});
-	Vector2 EPos = { P->GetTransform().Position.x, P->GetTransform().Position.y - P->ScaleSize() };
-//	E->SetPosition({ P->GetTransform().Position.x, P->GetTransform().Position.y - P->ScaleSize() });
-	E->SetPosition(EPos);
-
-#endif
+	m_Player->SetPosition({ Game::GetGame()->WindowWidth() / 2.0f, Game::GetGame()->WindowHeightF() - m_Player->ScaleHalfSize() });
 
 	m_ScoreText = AddGameObject<TextObject>();
 	m_ScoreText->SetPosition({ 25.0f, 25.0f });
@@ -81,22 +65,24 @@ void PlayState::OnUpdate(float DeltaTime)
 
 	UpdateScore();
 	UpdateFrequencyText();
-	
+
+	//	CheckGameOver();
 }
+
+/*
+void PlayState::OnProcessInput(Input* GameInput)
+{
+	if (GameInput->IsKeyDown(EE_KEY_RETURN)) {
+		if (Game::GetGame()->GetGameOver()) {
+			Game::GetGame()->SetRestart();
+		}
+	}
+}
+*/
 
 void PlayState::UpdateScore()
 {
-	if(m_Missile){
-		if (m_Missile->m_hitEnemy == true) {
-			m_Score += 10;
-			// Stop counting when the upper limit is reached
-			if (m_Score >= 99990) {
-				m_Score = 99990;		
-			}
-			m_Missile->m_hitEnemy = false;
-		}
-	}
-//	std::string scoreString = "Score: " + std::to_string(0);
+	m_Score = Game::GetGame()->GetHitCount() * 10;
 	std::string scoreString = "Score: " + std::to_string(m_Score);
 	m_ScoreText->SetText(scoreString.c_str());
 }
@@ -110,19 +96,15 @@ void PlayState::UpdateFrequencyText()
 	m_FreqText->SetText(freqString.c_str());
 }
 
-
-
-
-
 void PlayState::EnemySpawner(float DeltaTime)
 {
-	m_EnemySpawnTimer -= DeltaTime; 
+	m_EnemySpawnTimer -= DeltaTime;
 
 	if (m_EnemySpawnTimer <= 0.0f) {
 		Enemy* E = AddGameObject<Enemy>();
 
 		float PosX = GetRandomFloatRange(E->ScaleHalfSize(), Game::GetGame()->WindowWidthF() - E->ScaleHalfSize());
-		E->SetPosition({ PosX, -E->ScaleHalfSize()});
+		E->SetPosition({ PosX, -E->ScaleHalfSize() });
 
 		m_EnemySpawnTimer = m_EnemyFrequency;
 
@@ -141,11 +123,7 @@ void PlayState::MissileSpawner(float DeltaTime)
 		// Prevents firing until a predetermined time has elapsed
 		if (m_MissileSpawnTimer <= 0.0f) {
 			m_Missile = AddGameObject<Missile>();
-			//			Missile* M = AddGameObject<Missile>();
-
-			// Spawns a missile above the player. Add 1 above to avoid duplication.
-			Vector2 MPos = { m_Player->GetTransform().Position.x, m_Player->GetTransform().Position.y - m_Player->ScaleSize() - 1};
-//			M->SetPosition(MPos);
+			Vector2 MPos = { m_Player->GetTransform().Position.x, m_Player->GetTransform().Position.y - m_Player->ScaleSize() - 1 };
 			m_Missile->SetPosition(MPos);
 			m_MissileSpawnTimer = 0.5f;
 		}
@@ -159,3 +137,20 @@ float PlayState::GetRandomFloatRange(float min, float max) const
 
 	return RandNum(RandGenerator);
 }
+
+/*
+void PlayState::CheckGameOver()
+{
+	if (Game::GetGame()->GetGameOver()) {
+		m_GameOverText = AddGameObject<TextObject>();
+		m_GameOverText->SetPosition({ 200.0f, 250.0f });
+		m_GameOverText->SetFontSize(50);
+		m_GameOverText->SetAlignment(AL_TOP_LEFT);
+//		std::string gameoverString = "Game Over";
+		std::string gameoverString = "Game Over! Press Enter/Return To Restart Game";
+		m_GameOverText->SetText(gameoverString.c_str());
+		m_GameOverText->Update(0);
+	}
+
+}
+*/

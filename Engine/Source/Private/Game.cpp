@@ -10,7 +10,10 @@
 #include "Graphics/Text.h"
 #include "Graphics/Texture.h"
 #include "SDL2/SDL_syswm.h"
+#include "GameObjects/TextObject.h"
 #include "Menus/WinMenu.h"
+
+
 
 using namespace std;
 Game* Game::GetGame()
@@ -84,7 +87,7 @@ void Game::DestroyTexture(Texture* TextureToDestroy)
 	if (it != m_TextureStack.end()) {
 		m_TextureStack.erase(it);
 	}
-	
+
 
 	delete TextureToDestroy;
 	TextureToDestroy = nullptr;
@@ -108,9 +111,9 @@ Text* Game::ImportText(const char* PathToFiile)
 void Game::DestroyText(Text* TextToDestroy)
 {
 
-    std:erase_if(m_TextStack, [TextToDestroy](const auto Item) {return Item == TextToDestroy;  });
+std:erase_if(m_TextStack, [TextToDestroy](const auto Item) {return Item == TextToDestroy;  });
 	TextToDestroy->Cleanup();
-	delete TextToDestroy; 
+	delete TextToDestroy;
 }
 
 int Game::WindowWidth() const
@@ -148,12 +151,16 @@ Game::Game()
 {
 	printf("Game created.\n");
 	m_IsGameOpen = true;
+	m_IsGameStart = false;
+	m_IsGameOver = false;
+	m_IsGameRestart = false;
 	m_WindowRef = nullptr;
 	m_RendererRef = nullptr;
 	m_GameStateMachine = nullptr;
+	m_MainMenuText = nullptr;
+	m_GameOverText = nullptr;
+	m_HitCount = 0;
 	m_WinMenu = nullptr;
-	
-
 }
 
 Game::~Game()
@@ -189,47 +196,7 @@ void Game::Start()
 		SDL_WINDOWPOS_CENTERED_DISPLAY(1), SDL_WINDOWPOS_CENTERED_DISPLAY(1),//start position on the window 
 		1280, 720,//resolution of the window
 		0
-	//		SDL_WINDOW_POPUP_MENU
 	); //special flags to change the window settings
-
-#if 1	// メニューの追加 https://stackoverflow.com/questions/51250046/sdl2-win32-api-menubar-click-event-not-working
-
-	SDL_SysWMinfo infoWindow;
-	SDL_VERSION(&infoWindow.version);
-	SDL_GetWindowWMInfo(m_WindowRef, &infoWindow);
-	HWND hwnd = infoWindow.info.win.window;
-
-	#define ID_LOADROM 1
-	#define ID_ABOUT 2
-	#define ID_EXIT 3
-	#define ID_CONTROLS 4
-	static HMENU hHelp;
-	static HMENU hEdit;
-	static HMENU hFile;
-	static HMENU hMenuBar;
-
-	hMenuBar = CreateMenu();
-	hFile = CreateMenu();
-	hEdit = CreateMenu();
-	hHelp = CreateMenu();
-
-	AppendMenu(hMenuBar, MF_POPUP, (UINT_PTR)hFile, TEXT("File"));
-//	AppendMenu(hMenuBar, MF_POPUP, (UINT_PTR)hEdit, TEXT("Edit"));
-	AppendMenu(hMenuBar, MF_POPUP, (UINT_PTR)hEdit, TEXT("Game"));
-//	AppendMenu(hMenuBar, MF_POPUP, (UINT_PTR)hHelp, TEXT("Help"));
-	AppendMenu(hMenuBar, MF_POPUP, (UINT_PTR)hHelp, TEXT("About"));
-
-//	AppendMenu(hFile, MF_STRING, ID_LOADROM, TEXT("Load ROM"));
-//	AppendMenu(hFile, MF_STRING, ID_EXIT, TEXT("Exit"));
-
-//	AppendMenu(hEdit, MF_STRING, ID_CONTROLS, TEXT("Configure Controls"));
-
-//	AppendMenu(hHelp, MF_STRING, ID_ABOUT, TEXT("About"));
-
-	SetMenu(hwnd, hMenuBar);
-
-#endif
-
 
 	//did the window successfully create 
 	if (m_WindowRef == nullptr) {
@@ -261,22 +228,38 @@ void Game::Start()
 	if (!m_WinMenu->InitialiseMenu()) {
 		Cleanup();
 		return;
-	}
+	};
 
-	auto Default = new MainMenuState();
+	GameState* Default = new PlayState();
+	auto mainMenuState = new MainMenuState();
 	m_GameStateMachine = new GameStateMachine(Default);
- 
+
 	GameLoop();
 }
 
 void Game::GameLoop()
 {
+	// Display Main Menu
+	DispMainMenu();
+
+	// Wait for start or quit
+	while (!m_IsGameStart && m_IsGameOpen) {
+		CheckStart();
+	}
+
 	while (m_IsGameOpen) {
+
+		CheckReStart();
+
 		PreLoop();
 
 		ProcessInput();
-		
-		Update();
+
+		CheckGameOver();
+
+		if (!GetGameOver()) {	// Screen does not update when game over
+			Update();
+		}
 
 		Render();
 
@@ -304,7 +287,6 @@ void Game::Cleanup()
 
 	if (m_WinMenu != nullptr) {
 		delete m_WinMenu;
-
 	}
 
 	//does the renderer exist
@@ -355,7 +337,7 @@ void Game::Update()
 
 	//run the active game state update
 	m_GameStateMachine->Update(static_cast<float>(DeltaTime));
-	
+
 	//caps the frame rate 
 	int FrameDuration = 1000 / 240;
 
@@ -368,18 +350,18 @@ void Game::Update()
 
 void Game::Render()
 {
-	
+
 	SDL_SetRenderDrawColor(m_RendererRef, 50, 50, 50, 255);
 	//User the color just started to clear the previous frame and fill in with that colour 
 	SDL_RenderClear(m_RendererRef);
 
 	//TODO: Render custom graphics
-	for(const auto TexRef : m_TextureStack) {
+	for (const auto TexRef : m_TextureStack) {
 		if (TexRef != nullptr) {
 			TexRef->Draw();
 		}
 	}
-	
+
 	for (const auto Item : m_TextStack) {
 		if (Item != nullptr) {
 			Item->Draw();
@@ -388,7 +370,7 @@ void Game::Render()
 	}
 	m_GameStateMachine->Render(m_RendererRef);
 
-	
+
 	//Present the graphics to the renderer 
 	SDL_RenderPresent(m_RendererRef);
 }
@@ -396,4 +378,92 @@ void Game::Render()
 void Game::CollectGarbage()
 {
 	m_GameStateMachine->GarbageCollection();
+}
+
+void Game::DispMainMenu()
+{
+	// create text object
+	m_MainMenuText = new TextObject();
+	m_MainMenuText->SetPosition({ 150.0f, 300.0f });
+	m_MainMenuText->SetFontSize(60);
+	m_MainMenuText->SetAlignment(AL_TOP_LEFT);
+	std::string mainMenuString = "Press Enter/Return To Start Game";
+	m_MainMenuText->SetText(mainMenuString.c_str());
+	m_MainMenuText->Update(0);
+
+	// render
+	for (const auto Item : m_TextStack) {
+		if (Item != nullptr) {
+			Item->Draw();
+		}
+	}
+	SDL_RenderPresent(m_RendererRef);
+}
+
+void Game::CheckStart()
+{
+	// check cross button is pressed on the window
+	m_GameInput->ProcessInput();
+
+	if (m_GameInput->IsKeyDown(EE_KEY_RETURN)) {
+		m_IsGameStart = true;
+		m_MainMenuText->SetText("");
+		m_TextStack.clear();
+		delete m_MainMenuText;
+	}
+}
+
+void Game::CheckGameOver()
+{
+	if (GetGameOver()) {
+		if (m_GameOverText == nullptr) {
+			m_GameOverText = new TextObject();
+			m_GameOverText->SetPosition({ 120.0f, 320.0f });
+			m_GameOverText->SetFontSize(40);
+			m_GameOverText->SetAlignment(AL_TOP_LEFT);
+			std::string gemeoverString = "Game Over!   Press Enter/Return To Restart Game";
+			m_GameOverText->SetText(gemeoverString.c_str());
+			m_GameOverText->Update(0);
+		}
+	}
+}
+
+void Game::CheckReStart()
+{
+	if (GetGameOver()) {
+		if (m_GameInput->IsKeyDown(EE_KEY_RETURN)) {
+			SetRestart(true);
+		}
+	}
+
+	if (GetRestart() == true) {
+		SetGameOver(false);
+		SetRestart(false);
+
+		m_GameOverText->SetText("");
+
+		ClearHitCount();
+
+		//run the cleanup 
+		m_GameStateMachine->Cleanup();
+
+		for (const auto Item : m_TextStack) {
+			Item->Cleanup();
+			delete Item;
+		}
+
+		// cleanup and remove all textures from the texture stack 
+		for (int i = m_TextureStack.size() - 1; i > -1; --i) {
+			DestroyTexture(m_TextureStack[i]);
+		}
+
+		delete m_GameOverText;
+		m_GameOverText = nullptr;
+		m_TextStack.clear();
+
+		delete m_GameStateMachine;
+		GameState* Default = new PlayState();
+		m_GameStateMachine = new GameStateMachine(Default);
+
+	}
 }

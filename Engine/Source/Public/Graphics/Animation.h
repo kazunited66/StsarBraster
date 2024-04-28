@@ -4,7 +4,7 @@ class Texture;
 
 struct AnimationParams {
 	AnimationParams() {
-		FrameWidth = FrameHeight = 0; 
+		FrameWidth = FrameHeight = 0;
 		fps = 0.0f;
 		StartFrame = EndFrame = 0;
 		MaxFrames = 0;
@@ -16,23 +16,23 @@ struct AnimationParams {
 	unsigned int  FrameWidth, FrameHeight;
 
 	//Frames per second 
-	float fps; 
+	float fps;
 
 	//start and end frame that the animation will play 
 	unsigned int StartFrame, EndFrame;
-    
-    //amount of frames in the sprite sheet 
+
+	//amount of frames in the sprite sheet 
 	unsigned int MaxFrames;
 
 };
 class Animation {
-public: 
+public:
 	Animation();
 	~Animation();
 
 	//imports the animation and adds animation parameters 
-	bool CreateAnimation(const char* PathToFile, AnimationParams* Params = nullptr); 
-	
+	bool CreateAnimation(const char* PathToFile, AnimationParams* Params = nullptr);
+
 	//upgate the animation logis each frame
 	void Update(float DeltaTime);
 
@@ -51,7 +51,7 @@ private:
 
 	//the  current frame of animation 
 	unsigned int m_CurrentFrame;
-	
+
 	//how much time has passed from last frame 
 	float m_FrameTimer;
 };

@@ -2,13 +2,13 @@
 #include "Math/Vector2.h"
 #include<EngineTypes.h>
 class Input;
-class Bounds; 
+class Bounds;
 struct EETransform {
 	//default structor 
 	EETransform() : Position(0.0f), Rotation(0.0f), Scale(1.0f) {}
 	//assignment constructor
-	EETransform(Vector2 Position, float Rotation, Vector2 Scale) :  
-	          Position(Position), Rotation(Rotation), Scale(Scale){}
+	EETransform(Vector2 Position, float Rotation, Vector2 Scale) :
+		Position(Position), Rotation(Rotation), Scale(Scale) {}
 	//transform constructor
 	EETransform(const EETransform& Other) :
 		Position(Other.Position), Rotation(Other.Rotation), Scale(Other.Scale) {}
@@ -24,7 +24,7 @@ struct EETransform {
 class GameObject {
 
 public:
-	GameObject(): m_ShouldDestroy(false){
+	GameObject() : m_ShouldDestroy(false) {
 
 	}
 
@@ -54,7 +54,7 @@ public:
 
 	//Position, Rotation, Scale
 
-	EETransform GetTransform() const { return m_Transform;  }
+	EETransform GetTransform() const { return m_Transform; }
 
 	//set the transform of the object 
 	void SetTransform(EETransform Transform);
@@ -77,7 +77,7 @@ protected:
 	//run on the game object has been marked for destroy 
 	virtual void OnUpdate(float DeltaTime) {}
 	//run on the game object process input 
-	virtual void OnProcessInput(Input* GameInput){}
+	virtual void OnProcessInput(Input* GameInput) {}
 	//run on the game object post update (each frame after the update)
 	virtual void OnPostUpdate(float DeltaTime) {}
 
@@ -94,7 +94,7 @@ private:
 	//determine is the object should be destroyed at the end of thr loop 
 	bool m_ShouldDestroy;
 
-	EETransform m_Transform; 
+	EETransform m_Transform;
 
 	TArray<Bounds*> m_BoundsStack;
 

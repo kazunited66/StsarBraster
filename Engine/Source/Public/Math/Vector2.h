@@ -1,6 +1,6 @@
 #pragma once
 
-using namespace std; 
+using namespace std;
 
 struct Vector2 {
 
@@ -28,7 +28,7 @@ struct Vector2 {
 
 	//boolean operators 
 	//if 2 Vector2s are equal
-	bool operator == (const Vector2& Other) const{
+	bool operator == (const Vector2& Other) const {
 		return x == Other.x && y == Other.y;
 	}
 
@@ -82,12 +82,12 @@ struct Vector2 {
 	Vector2& operator/=(const Vector2& Other);
 
 	//division float 
-	Vector2 operator/(const float& Scalar) const ;
+	Vector2 operator/(const float& Scalar) const;
 
 	//division equals float 
 	Vector2& operator/=(const float& Other);
-    
-	
+
+
 
 	//return an infinitite negative vector 
 	//otherwise know as invalid vector
@@ -103,7 +103,7 @@ struct Vector2 {
 
 	//Get the distance between 2 vectors
 	//this is inaccurate by double the size but cheaper 
-	static float DistSqd( Vector2& V1, Vector2& V2) {
+	static float DistSqd(Vector2& V1, Vector2& V2) {
 		Vector2 DistanceVector(V1 - V2);
 
 		return DistanceVector.x * DistanceVector.x + DistanceVector.y * DistanceVector.y;
@@ -112,7 +112,7 @@ struct Vector2 {
 
 	//get the distance between 2 vectors
 	static float Distance(Vector2& V1, Vector2& V2);
-	
+
 	//change the vector2 to a normalised value 
 	Vector2& Normalise();
 	//return a normalissed vector based on another vector 
@@ -123,7 +123,7 @@ struct Vector2 {
 
 	//log the length of the vector2 to console 
 	void LogLength();
-	
+
 	float x, y;
 
 

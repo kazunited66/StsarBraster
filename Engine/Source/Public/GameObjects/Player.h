@@ -3,20 +3,22 @@
 
 
 class Player : public Charactor {
-public: 
-	Player(); 
-protected: 
+public:
+	Player();
+protected:
 
 
 	virtual void OnProcessInput(Input* GameInput) override;
 
-	virtual void OnUpdate(float DeltaTime) override; 
+	virtual void OnUpdate(float DeltaTime) override;
 	void SetPoweredEngines(bool Powered);
 
 	virtual void OnOverlapEnter(Bounds* OverlapBoudns, Bounds* HitBounds) override;
-protected: 
+protected:
 	//store the diffrent effect for the engine effects 
 	TArray<Sprite*>m_EngineEffects;
-public: 
+public:
 	bool	m_IsSpaceKeyPressed;
+	bool	m_IsEnterKeyPressed;
+	bool	m_CollisionEnemy;
 };

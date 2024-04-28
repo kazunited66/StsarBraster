@@ -51,19 +51,20 @@ bool Text::ImportTexture(const char* PathToFile)
 	EE_LOG("Text", "Successfully imported font: " << m_Path);
 
 	return true;
-	
+
 }
 
 void Text::Cleanup()
 {
 	TTF_CloseFont(m_Font);
 
-    /*Super: Cleanup();*/
+	//    Super: Cleanup();
+	Super::Cleanup();
 }
 
 void Text::SetText(const char* NewText)
 {
-	
+
 	m_Text = NewText;
 	UpdateFont();
 }

@@ -19,8 +19,8 @@ void GameObject::ProcessInput(Input* GameInput)
 	if (IsPendingDestroy()) {
 		return;
 	}
-	OnProcessInput(GameInput); 
-} 
+	OnProcessInput(GameInput);
+}
 
 void GameObject::Update(float DeltaTime)
 {
@@ -43,15 +43,15 @@ void GameObject::DestreyObject()
 	if (m_ShouldDestroy) {
 		OnDestroy();
 	}
-	 
 
-	 m_ShouldDestroy = true;
+
+	m_ShouldDestroy = true;
 }
 
 void GameObject::Cleanup()
 {
 	for (auto TestBounds : m_BoundsStack) {
-		delete TestBounds; 
+		delete TestBounds;
 	}
 }
 
@@ -100,7 +100,7 @@ void GameObject::TestOverlapEvent(Bounds* OtherBounds)
 	if (OtherBounds->m_CollisionType == CT_NONE) {
 		return;
 	}
-	
+
 	//loop to all of the collisition bounds
 	for (auto TestBounds : m_BoundsStack) {
 
@@ -125,8 +125,8 @@ void GameObject::TestOverlapEvent(Bounds* OtherBounds)
 
 		}
 
-	
-		
+
+
 		//search through the overlapped array to detect if me have already overlapped 
 		auto it = std::find(TestBounds->m_Overlapped.begin(), TestBounds->m_Overlapped.end(), OtherBounds);
 		bool IsIntersecting = Bounds::BoundsIntersect(*TestBounds, *OtherBounds);
@@ -159,11 +159,11 @@ void GameObject::CollectGarbage()
 	for (const auto TestBounds : m_BoundsStack) {
 		size_t num = std::erase_if(TestBounds->m_Overlapped,
 			[](Bounds* OBounds) { return OBounds->IsPendingDestroy(); }
-			);
+		);
 		if (num > 0) {
 			EE_LOG("GameObject", "Bounds removed: " << num);
 		}
-		
+
 	}
 
 }
@@ -190,4 +190,4 @@ void GameObject::BoundsMatchObjectPosition()
 	}
 }
 
- 
+

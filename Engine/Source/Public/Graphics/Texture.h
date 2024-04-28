@@ -8,7 +8,7 @@ struct SDL_Rect;
 
 
 class Texture {
-public: 
+public:
 	Texture(SDL_Renderer* Renderer);
 	virtual ~Texture();
 
@@ -29,20 +29,20 @@ public:
 	//set the clip for the text ure 
 	void SetClip(int x, int y, int w, int h);
 
-public: 
+public:
 	//position x & y to render to
 	int m_PosX, m_PosY;
 
 	// retation of the image 
 	float m_Angle;
 
-	float m_ScaleX, m_ScaleY; 
+	float m_ScaleX, m_ScaleY;
 	//determine whether or not render the texture 
 	bool m_IsVisible;
 
 	EAligment m_Alignment;
 
-protected: 
+protected:
 	//Texture that SDL understands
 	SDL_Texture* m_TextureRef;
 

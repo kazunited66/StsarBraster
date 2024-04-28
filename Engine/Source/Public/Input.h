@@ -1,6 +1,5 @@
 #pragma once
 #include "SDL2/SDL_events.h"
-#include"Game.h"
 typedef enum
 {
     EE_KEY_UNKNOWN = 0,
@@ -390,7 +389,7 @@ typedef enum
 
     /* Add any other keys here. */
 
-    SDL_NUM_KEY  = 512 /**< not a key, just marks the number of scancodes
+    SDL_NUM_KEY = 512 /**< not a key, just marks the number of scancodes
                                  for array bounds */
 } EE_Key;
 
@@ -418,7 +417,7 @@ public:
     bool IsMouseButtonDown(EE_MouseButton Button);
 
     Vector2 GetMousePos() const;
-private: 
+private:
     //detect the states of the mouse 
     void DetectMouseButtonState(unsigned int Event, bool Value);
 
@@ -427,4 +426,6 @@ private:
 private:
     //state of each button on the mouse 
     bool m_MouseState[3] = { false };
+
+
 };

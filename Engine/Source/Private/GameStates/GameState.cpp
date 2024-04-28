@@ -5,30 +5,30 @@
 
 #include "Debug.h"
 
- void GameState::Start()
+void GameState::Start()
 {
-	 OnStart();
-	 EE_LOG("GameState", "start game state");
+	OnStart();
+	EE_LOG("GameState", "start game state");
 
 
 }
 
 void GameState::Cleanup()
 {
-	 OnCleanup();
+	OnCleanup();
 
-	 //desdtrtoy any object pending spwam 
-	 for (auto GO : m_GameObjectPendingSpawn) {
-		 GO->Cleanup();
-		 delete GO;
-		 GO = nullptr;
-	 }
-	 //destroy any remaining  game object
-	 for (auto GO : m_GameObjectStack) {
-		 GO->Cleanup();
-		 delete GO;
-		 GO = nullptr;
-	 }
+	//desdtrtoy any object pending spwam 
+	for (auto GO : m_GameObjectPendingSpawn) {
+		GO->Cleanup();
+		delete GO;
+		GO = nullptr;
+	}
+	//destroy any remaining  game object
+	for (auto GO : m_GameObjectStack) {
+		GO->Cleanup();
+		delete GO;
+		GO = nullptr;
+	}
 }
 
 void GameState::PreLoop()
@@ -45,39 +45,39 @@ void GameState::PreLoop()
 	OnPreLoop();
 }
 
- void GameState::ProcessInput(Input* GameInput)
+void GameState::ProcessInput(Input* GameInput)
 {
-	 //run the input listner functiom for all game object 
-	 for (auto GO : m_GameObjectStack) {
-		 if (GO != nullptr) {
-			 GO->ProcessInput(GameInput);
-		 }
-	 }
+	//run the input listner functiom for all game object 
+	for (auto GO : m_GameObjectStack) {
+		if (GO != nullptr) {
+			GO->ProcessInput(GameInput);
+		}
+	}
 
-	 OnProcessInput(GameInput);
+	OnProcessInput(GameInput);
 
-	
+
 
 }
 
- void GameState::Update(float DeltaTime)
+void GameState::Update(float DeltaTime)
 {
-	 //run the update logic for all game object 
-	 for (auto GO : m_GameObjectStack) {
-		 if (GO != nullptr) {
-			 GO->Update(DeltaTime);
-			 GO->PostUpdate(DeltaTime);
+	//run the update logic for all game object 
+	for (auto GO : m_GameObjectStack) {
+		if (GO != nullptr) {
+			GO->Update(DeltaTime);
+			GO->PostUpdate(DeltaTime);
 
-			 for (auto OtherGo : m_GameObjectStack) {
-				 for (auto OtherBounds : OtherGo->GetAllBounds()) {
-					 // testing the bounds for overlap events
-					 GO->TestOverlapEvent(OtherBounds);
-				 }
-			 }
-		 }
-	 }
+			for (auto OtherGo : m_GameObjectStack) {
+				for (auto OtherBounds : OtherGo->GetAllBounds()) {
+					// testing the bounds for overlap events
+					GO->TestOverlapEvent(OtherBounds);
+				}
+			}
+		}
+	}
 
-	 OnUpdate(DeltaTime);
+	OnUpdate(DeltaTime);
 }
 
 void GameState::Render(SDL_Renderer* Renderer)

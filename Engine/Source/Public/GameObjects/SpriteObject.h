@@ -3,7 +3,7 @@
 #include"Graphics/Animation.h"
 
 class Sprite {
-public: 
+public:
 	//default constructor 
 	Sprite() : m_Sprite(nullptr), m_IsActive(true) {
 		m_Offset.Scale = 0.0f;
@@ -27,15 +27,15 @@ public:
 	EETransform m_Offset;
 
 
-private: 
-	bool m_IsActive; 
+private:
+	bool m_IsActive;
 
 };
 class SpriteObject : public GameObject {
-public: 
+public:
 
 	SpriteObject() = default;
-	
+
 
 	virtual void Cleanup() override;
 
@@ -46,7 +46,7 @@ protected:
 
 	virtual void OnPostUpdate(float DeletaTIme) override;
 
-private: 
+private:
 	void SpriteFollowObject(Sprite* SpriteToFollow);
 private:
 

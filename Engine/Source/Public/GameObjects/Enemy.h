@@ -2,12 +2,14 @@
 #include"Character.h"
 
 class Enemy : public Charactor {
-public: 
+public:
 	Enemy();
-protected: 
-	
+protected:
+
 	virtual void OnUpdate(float DeltTime) override;
 protected:
-	
-	
+
+public:
+	bool m_ReachedBottom;
+
 };

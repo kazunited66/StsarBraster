@@ -6,7 +6,7 @@ void SpriteObject::Cleanup()
 {
 	for (auto Sprite : m_SpriteStack) {
 		delete Sprite;
-		Sprite = nullptr; 
+		Sprite = nullptr;
 	}
 }
 
@@ -20,7 +20,7 @@ Sprite* SpriteObject::AddSprite(const char* PathToFile, AnimationParams* Params)
 	}
 	Sprite* NewSprite = new Sprite(NewAnim);
 
-	 //set the sprite to the object transforms 
+	//set the sprite to the object transforms 
 	SpriteFollowObject(NewSprite);
 
 	//add it to the sprite stack 
@@ -39,7 +39,7 @@ void SpriteObject::OnPostUpdate(float DeletaTIme)
 			continue;
 		}
 
-	    
+
 		SpriteFollowObject(Sprite);
 		//update the sprites animation 
 		Sprite->m_Sprite->Update(DeletaTIme);
@@ -59,5 +59,5 @@ void SpriteObject::SpriteFollowObject(Sprite* SpriteToFollow)
 	//set the sprite scale to match the object 
 	SpriteToFollow->m_Sprite->SetScale(
 		GetTransform().Scale.x + SpriteToFollow->m_Offset.Scale.x,
-		GetTransform().Scale.y + SpriteToFollow->m_Offset.Scale.y );
+		GetTransform().Scale.y + SpriteToFollow->m_Offset.Scale.y);
 }

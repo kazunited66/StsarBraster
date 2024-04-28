@@ -8,13 +8,13 @@ struct EERect {
 	EERect() : Origin(0.0f), Extent(1.0f) {}
 	//complex constructor 
 	EERect(Vector2 Origin, Vector2 Extent) : Origin(Origin), Extent(Extent) {}
-	
+
 	// min value position of the relative to the screen 
 	Vector2 Min() const { return Origin - Extent; }
 	// max value position of the relative to the screen 
-	Vector2 Max() const { return Origin + Extent;  }
+	Vector2 Max() const { return Origin + Extent; }
 	//center of rectengle 	
-    Vector2 Origin;
+	Vector2 Origin;
 	//half size of the box 
 	Vector2 Extent;
 };
@@ -27,8 +27,8 @@ enum EECollisionType : unsigned int {
 struct STBoundsColour {
 	STBoundsColour() : r(255), g(0), b(0) {}
 
-	STBoundsColour(uint8_t r, uint8_t g, uint8_t b) :  r(r), g(g), b(b) {}
-	 
+	STBoundsColour(uint8_t r, uint8_t g, uint8_t b) : r(r), g(g), b(b) {}
+
 
 	uint8_t r;
 	uint8_t g;
@@ -38,7 +38,7 @@ struct STBoundsColour {
 };
 
 class Bounds {
-public: 
+public:
 	Bounds(GameObject* Owner, Vector2 Origin = 0.0f, Vector2 Extent = 1.0f);
 
 	Vector2 GetCenter() { return m_Rect.Origin + m_OriginalOffset; }
@@ -48,17 +48,17 @@ public:
 	GameObject* GetOwner() const { return m_Owner; }
 
 	// mark the bounds for destroy 
-	void DestroyBounds() { m_ShouldDestroy = true;  }
+	void DestroyBounds() { m_ShouldDestroy = true; }
 
 	// check is the bounds is marked for destroy
 	bool IsPendingDestroy() const { return m_ShouldDestroy; }
 
-public: 
+public:
 
 	//this is the rectengle that defines the bound 
 	EERect m_Rect;
 
-	Vector2 m_OriginalOffset; 
+	Vector2 m_OriginalOffset;
 
 	EECollisionType m_CollisionType;
 
@@ -66,15 +66,15 @@ public:
 
 	STBoundsColour m_RenderColour;
 
-	TArray<Bounds*> m_Overlapped; 
+	TArray<Bounds*> m_Overlapped;
 
-	bool m_Debug; 
-	
-private: 
+	bool m_Debug;
+
+private:
 
 
 	//this is the owner the bounds is attached to 
-	GameObject* m_Owner; 
+	GameObject* m_Owner;
 
 	// flag to determine if the bounds is to be destroyed 
 	bool m_ShouldDestroy;

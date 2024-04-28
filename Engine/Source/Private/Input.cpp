@@ -30,6 +30,7 @@ void Input::ProcessInput()
 		if (InputEvent.type == SDL_SYSWMEVENT) {
 			HandleWinMenuEvents(&InputEvent);
 		}
+
 	}
 }
 
@@ -40,13 +41,13 @@ bool Input::IsKeyDown(EE_Key Key) {
 		return false;
 	}
 
-		return KeyStates[Key]; 
+	return KeyStates[Key];
 }
 
 bool Input::IsMouseButtonDown(EE_MouseButton Button)
 {
 	if (Button >= EE_NUM_BUTTONS) {
-		return false; 
+		return false;
 	}
 
 	return m_MouseState[Button];
@@ -55,13 +56,13 @@ bool Input::IsMouseButtonDown(EE_MouseButton Button)
 void Input::DetectMouseButtonState(unsigned int Event, bool Value)
 {
 	switch (Event) {
-	case SDL_BUTTON_LEFT :
-		m_MouseState[EE_MOUSE_LEFT] = Value; 
+	case SDL_BUTTON_LEFT:
+		m_MouseState[EE_MOUSE_LEFT] = Value;
 		break;
-	case SDL_BUTTON_MIDDLE :
+	case SDL_BUTTON_MIDDLE:
 		m_MouseState[EE_MOUSE_MIDDLE] = Value;
 		break;
-	case SDL_BUTTON_RIGHT :
+	case SDL_BUTTON_RIGHT:
 		m_MouseState[EE_MOUSE_RIGHT] = Value;
 		break;
 
@@ -71,10 +72,10 @@ void Input::DetectMouseButtonState(unsigned int Event, bool Value)
 void Input::HandleWinMenuEvents(SDL_Event* Event)
 {
 	switch (Event->syswm.msg->msg.win.wParam) {
-	case ID_FILE_EXITAPP :
-	Game::GetGame()->QuitApp();
+	case ID_FILE_EXITAPP:
+		Game::GetGame()->QuitApp();
 		break;
-	case ID_FILE_RESTARTGAME : 
+	case ID_FILE_RESTARTGAME:
 		Game::GetGame()->RestartGame();
 		break;
 
@@ -86,7 +87,7 @@ void Input::HandleWinMenuEvents(SDL_Event* Event)
 
 		break;
 
-	case ID_ABOUT_ABOUTGAME :
+	case ID_ABOUT_ABOUTGAME:
 		Game::GetGame()->GetWinMenu()->ActivatePopup(
 			"Enter Eclips Game",
 			"Enter Eclips Game is an SDL2-based C++ 2D Game engine creaated by Kazunori Masuda in 2024"
@@ -106,5 +107,5 @@ Vector2 Input::GetMousePos() const
 
 	SDL_GetMouseState(&x, &y);
 
-	return Vector2((float)x,(float)y);
+	return Vector2((float)x, (float)y);
 }

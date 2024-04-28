@@ -2,15 +2,15 @@
 
 Bounds::Bounds(GameObject* Owner, Vector2 Origin, Vector2 Extent)
 {
-	m_Rect.Origin = Origin; 
-	m_Rect.Extent = Extent; 
-	m_Owner = Owner; 
+	m_Rect.Origin = Origin;
+	m_Rect.Extent = Extent;
+	m_Owner = Owner;
 	m_CollisionType = CT_OVERLAP;
 	m_Tag = "ALL";
 	m_ShouldDestroy = false;
 
-#if 0		//org
-	m_Debug =  false; 
+#if 1		//org
+	m_Debug = false;
 #else
 	m_Debug = true;
 #endif

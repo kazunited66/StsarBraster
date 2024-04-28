@@ -23,12 +23,12 @@ void TextObject::SetFontSize(int NewSize)
 
 void TextObject::SetFontColour(uint8_t r, uint8_t g, uint8_t b, uint8_t a)
 {
-	m_Text->SetFontColour({r,g,b,a });
+	m_Text->SetFontColour({ r,g,b,a });
 }
 
 void TextObject::SetAlignment(EAligment NewAlignment)
 {
-	m_Text->m_Alignment = NewAlignment; 
+	m_Text->m_Alignment = NewAlignment;
 }
 
 void TextObject::OnUpdate(float DeltaTime)
@@ -38,7 +38,7 @@ void TextObject::OnUpdate(float DeltaTime)
 	m_Text->m_PosX = GetTransform().Position.x;
 	m_Text->m_PosY = GetTransform().Position.y;
 
-	m_Text->m_Angle = GetTransform().Rotation; 
+	m_Text->m_Angle = GetTransform().Rotation;
 
 
 }

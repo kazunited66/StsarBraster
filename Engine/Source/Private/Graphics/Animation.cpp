@@ -21,10 +21,10 @@ Animation::~Animation()
 	if (m_TextureRef != nullptr) {
 		Game::GetGame()->DestroyTexture(m_TextureRef);
 	}
-	
+
 }
 
-bool Animation::CreateAnimation(const char* PathToFile, AnimationParams* Params )
+bool Animation::CreateAnimation(const char* PathToFile, AnimationParams* Params)
 {
 	m_TextureRef = Game::GetGame()->ImportTexture(PathToFile);
 
@@ -33,7 +33,7 @@ bool Animation::CreateAnimation(const char* PathToFile, AnimationParams* Params 
 		return false;
 
 	}
-	
+
 
 	//if animation parameters were set 
 	if (Params != nullptr) {
@@ -55,7 +55,7 @@ bool Animation::CreateAnimation(const char* PathToFile, AnimationParams* Params 
 			0,
 			m_AnimParams->FrameWidth,
 			m_AnimParams->FrameHeight
-			);
+		);
 
 	}
 
@@ -79,7 +79,7 @@ void Animation::Update(float DeltaTime)
 		if (m_CurrentFrame > m_AnimParams->EndFrame) {
 			m_CurrentFrame = 0;
 		}
-		
+
 		m_TextureRef->SetClip(
 			m_AnimParams->FrameWidth * m_CurrentFrame,
 			0,
@@ -94,7 +94,7 @@ void Animation::Update(float DeltaTime)
 
 void Animation::SetPosition(int x, int y)
 {
-	if(m_TextureRef == nullptr) {
+	if (m_TextureRef == nullptr) {
 		return;
 	}
 	m_TextureRef->m_PosX = x;
@@ -126,10 +126,10 @@ void Animation::SetVisible(float IsVisible)
 	if (m_TextureRef == nullptr) {
 		return;
 	}
-	
+
 	m_TextureRef->m_IsVisible = IsVisible;
 }
 
- 
+
 
 

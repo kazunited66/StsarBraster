@@ -18,15 +18,15 @@ void PhysicsObject::AddForce(Vector2 Direction, float Force)
 
 void PhysicsObject::OnPostUpdate(float DeletaTime)
 {
-	
+
 	// the constant wind force against the object
 	Vector2 DragForce(m_Velocity * -m_Drag);
 	//Combine force for the velocity 
 	Vector2 FullForce(DragForce + m_AccelerationForce);
 	// physics force algorithm F + ma (a = F / m)
-	m_Acceleration = FullForce / std::max(m_Mass,0.00001f);
+	m_Acceleration = FullForce / std::max(m_Mass, 0.00001f);
 	//applying acceleration and multiply it my time 
-	m_Velocity += m_Acceleration * DeletaTime; 
+	m_Velocity += m_Acceleration * DeletaTime;
 
 	//cap the velocity at the maxmum value 
 	if (m_Velocity.Length() > m_MaxSpeed) {
@@ -43,10 +43,10 @@ void PhysicsObject::OnPostUpdate(float DeletaTime)
 	}
 
 	//apply deceleration
-	m_Velocity += DecelForce * DeletaTime; 
+	m_Velocity += DecelForce * DeletaTime;
 
 	Vector2 TimeVelocity(m_Velocity * DeletaTime);
-	
+
 	SetPosition(GetTransform().Position + TimeVelocity);
 
 	//reset out push force 

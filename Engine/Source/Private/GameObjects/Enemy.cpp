@@ -1,4 +1,5 @@
 #include"GameObjects/Enemy.h"
+#include "Game.h"
 
 #define Super Charactor 
 
@@ -7,13 +8,13 @@ Enemy::Enemy()
 	m_MaxSpeed = 100.0f;
 	m_Scale = 3.0f;
 	m_Size = 48.0f - 16.0f;
+	m_ReachedBottom = false;
 
 	m_MainSprite = AddSprite(
 		"Content/Sprites/Main Ship/MAin Ship - Bases/PNGs/Main Ship - Base - Very damaged.png");
 
 	//change the scale
 	SetScale(m_Scale);
-
 
 	//flip it 180 to look downward
 	SetRotation(180.0f);
@@ -32,5 +33,6 @@ void Enemy::OnUpdate(float DeltTime)
 
 	if (GetTransform().Position.y - ScaleHalfSize() > 720.0f) {
 		DestreyObject();
+		Game::GetGame()->SetGameOver(true);
 	}
 }

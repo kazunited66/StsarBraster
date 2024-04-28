@@ -39,18 +39,18 @@ bool Texture::ImportTexture(const char* PathToFile)
 	if (m_SurfaceData == nullptr) {
 		EE_LOG("Texture", "Image failed to import: " << SDL_GetError());
 
-			return false;
+		return false;
 	}
 
 	//create the textture from the surface 
 	m_TextureRef = SDL_CreateTextureFromSurface(m_RendererRef, m_SurfaceData);
 
-		if (m_TextureRef == nullptr) {
-			EE_LOG("Texture", "Image failed to convert to texture: " << SDL_GetError());
-			Cleanup();
-         }
+	if (m_TextureRef == nullptr) {
+		EE_LOG("Texture", "Image failed to convert to texture: " << SDL_GetError());
+		Cleanup();
+	}
 
-		EE_LOG("Texture", "Successfully imported texture: " << m_Path);
+	EE_LOG("Texture", "Successfully imported texture: " << m_Path);
 
 	return true;
 }
@@ -73,7 +73,7 @@ void Texture::Draw()
 
 	SDL_FRect DestRect = {
 		(float)m_PosX,(float)m_PosY,
-		ImageWidth * m_ScaleX, ImageHeight * m_ScaleY 
+		ImageWidth * m_ScaleX, ImageHeight * m_ScaleY
 
 	};
 	if (m_ClipRect != nullptr) {
@@ -98,7 +98,7 @@ void Texture::Draw()
 	case AL_TOP_LEFT:
 		break;
 	case AL_TOP_RIGHT:
-		DestRect.x -= DestRect.w ;
+		DestRect.x -= DestRect.w;
 		break;
 	case AL_TOP_CENTER:
 		DestRect.x -= DestRect.w / 2;
@@ -112,7 +112,7 @@ void Texture::Draw()
 	case AL_BOTTOM_CENTER:
 		DestRect.y -= DestRect.h;
 		DestRect.x -= DestRect.w;
-		
+
 		break;
 	default:
 		break;
@@ -125,14 +125,14 @@ void Texture::Draw()
 	};
 
 	SDL_RenderCopyExF(
-	    m_RendererRef,//Render to draw to 
+		m_RendererRef,//Render to draw to 
 		m_TextureRef,//The texture to draw to the renderer
 		m_ClipRect, //Clip rect 
 		&DestRect, // position and scale on the screen 
 		m_Angle, // rotation of the texture 
 		&Center, // center point for the rotation 
 		SDL_FLIP_NONE // flip the texture vertical or horizontal 
-        );
+	);
 }
 
 void Texture::Cleanup()

@@ -5,7 +5,7 @@ typedef struct _TTF_Font TTF_Font;
 struct SDL_Color;
 
 class Text : public Texture {
-public: 
+public:
 	Text(SDL_Renderer* Renderer);
 	~Text();
 
@@ -19,10 +19,10 @@ public:
 
 	void SetFontColour(SDL_Color Colour);
 
-protected: 
+protected:
 	void UpdateFont();
 
-private: 
+private:
 
 	TTF_Font* m_Font;
 

@@ -1,11 +1,12 @@
 #include"GameObjects/Missile.h"
 #include "GameObjects/Enemy.h"
+#include "Game.h"
 
 #define Super Charactor 
 
 Missile::Missile()
 {
-//	m_MaxSpeed = 100.0f;
+	//	m_MaxSpeed = 100.0f;
 	m_MaxSpeed = 50;
 	m_Scale = 3.0f;
 	m_Size = 48.0f - 16.0f;
@@ -37,21 +38,11 @@ void Missile::OnUpdate(float DeltTime)
 
 void Missile::OnOverlapEnter(Bounds* OverlapBoudns, Bounds* HitBounds)
 {
-#if 0
-	if (dynamic_cast<Enemy*>(OverlapBoudns->GetOwner())) {
+	if ((dynamic_cast<Enemy*>(OverlapBoudns->GetOwner())) &&
+		(dynamic_cast<Missile*>(HitBounds->GetOwner()))) {
 		OverlapBoudns->GetOwner()->DestreyObject();
-	}
-	if (dynamic_cast<Missile*>(HitBounds->GetOwner())) {
 		HitBounds->GetOwner()->DestreyObject();
 		m_hitEnemy = true;
+		Game::GetGame()->SetHitCount();
 	}
-#else
-	if ( (dynamic_cast<Enemy*>(OverlapBoudns->GetOwner())) &&
-		 (dynamic_cast<Missile*>(HitBounds->GetOwner()))){ 
-			OverlapBoudns->GetOwner()->DestreyObject();
-			HitBounds->GetOwner()->DestreyObject();
-			m_hitEnemy = true;
-	}
-#endif
-
 }

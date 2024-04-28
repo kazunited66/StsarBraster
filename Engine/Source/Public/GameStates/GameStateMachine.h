@@ -7,19 +7,19 @@ class GameState;
 
 class GameStateMachine {
 public:
-	GameStateMachine(GameState*DefaultGameState = new GameState());
+	GameStateMachine(GameState* DefaultGameState = new GameState());
 	~GameStateMachine() = default;
 
 	void Start();
 	//return current active game state  
-	GameState* GetActiveGameState() const; 
+	GameState* GetActiveGameState() const;
 
 	void Cleanup();
 
 	void SetNewGameState(GameState* NewGameState = new GameState(), bool IsAdditive = false);
 
 	void GarbageCollection();
-	 
+
 	void PreLoop();
 
 	//detects input od the game 
@@ -31,9 +31,9 @@ public:
 	void Render(SDL_Renderer* Renderer);
 
 
-private: 
+private:
 
-	TArray<GameState*> m_ActiveGameStateStack; 
+	TArray<GameState*> m_ActiveGameStateStack;
 	TArray<GameState*> m_PandingGameStateStack;
 
 

@@ -5,11 +5,11 @@ struct SDL_Renderer;
 class GameObject;
 
 class GameState {
-public: 
-	GameState() : m_ShouldDestroy(false) {} 
+public:
+	GameState() : m_ShouldDestroy(false) {}
 	virtual ~GameState() = default;
 
-    void Start();
+	void Start();
 
 	// clean up and deallocate memory for the state
 	void Cleanup();
@@ -38,12 +38,13 @@ public:
 		return NewObject;
 	}
 
-	void DestroyGameState() { m_ShouldDestroy = true;  }
+	void DestroyGameState() { m_ShouldDestroy = true; }
 
-	bool IsPendingDestroy() const { return m_ShouldDestroy; 
+	bool IsPendingDestroy() const {
+		return m_ShouldDestroy;
 	}
 
-protected: 
+protected:
 	virtual void OnStart() {}
 
 	virtual void OnCleanup() {}
@@ -54,7 +55,7 @@ protected:
 
 	virtual void OnUpdate(float DeltaTime) {}
 
-    virtual void OnGarbageCollection() {}
+	virtual void OnGarbageCollection() {}
 
 private:
 	TArray<GameObject*>m_GameObjectPendingSpawn;

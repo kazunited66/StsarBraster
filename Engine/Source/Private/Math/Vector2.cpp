@@ -34,7 +34,7 @@ Vector2 Vector2::operator/(const float& Scalar) const
 	if (Scalar == 0.0f) {
 		EE_LOG("Vector2", "Cannot divide by zero, returnnig a NaN vector2.");
 
-			return Vector2::NaN();
+		return Vector2::NaN();
 	}
 	return Vector2(x / Scalar, y / Scalar);
 }
@@ -46,7 +46,7 @@ Vector2 Vector2::NaN()
 {
 
 
-	return Vector2(std:: numeric_limits<float>::quiet_NaN());
+	return Vector2(std::numeric_limits<float>::quiet_NaN());
 	// TODO: insert return statement here
 }
 
@@ -82,7 +82,7 @@ Vector2 Vector2::Normalised(const Vector2& Other)
 
 void Vector2::Log()
 {
-	EE_LOG("Vector2", x<<", "<<y);
+	EE_LOG("Vector2", x << ", " << y);
 
 }
 
