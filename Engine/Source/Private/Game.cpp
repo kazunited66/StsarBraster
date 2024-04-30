@@ -324,16 +324,21 @@ void Game::ProcessInput()
 
 void Game::Update()
 {
-	//recode the previous frame time 
-	static double LastTickTime = 0.0;
 	//recode the current frame time 
 	double CurrentTickTime = (double)SDL_GetTicks64();
+
 	//get the delta time - how much time has passed since the last frame
-	double LongDelta = CurrentTickTime - LastTickTime;
+	double LongDelta = CurrentTickTime - m_LastTickTime;
+
 	//convert from milliseconds 
 	double DeltaTime = LongDelta / 1000.0;
+
 	// set the last tick time 
-	LastTickTime = CurrentTickTime;
+	m_LastTickTime = CurrentTickTime;
+
+	// for debug
+//	printf("[DBG] DeltaTime=%f\n", DeltaTime);
+
 
 	//run the active game state update
 	m_GameStateMachine->Update(static_cast<float>(DeltaTime));
@@ -466,4 +471,8 @@ void Game::CheckReStart()
 		m_GameStateMachine = new GameStateMachine(Default);
 
 	}
+}
+void Game::SetLastTickTimeNow()
+{
+	m_LastTickTime = (double)SDL_GetTicks64();
 }

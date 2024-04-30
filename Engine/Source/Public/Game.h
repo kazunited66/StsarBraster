@@ -59,6 +59,8 @@ public:
 
 	WinMenu* GetWinMenu() const { return m_WinMenu; }
 
+	void SetLastTickTimeNow();
+
 
 private:
 	//Constructor runs when the class is created
@@ -154,4 +156,6 @@ private:
 	TextObject* m_MainMenuText;
 
 	WinMenu* m_WinMenu;
+
+	double m_LastTickTime = 0.0;
 };

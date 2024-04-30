@@ -74,9 +74,12 @@ void Input::HandleWinMenuEvents(SDL_Event* Event)
 	switch (Event->syswm.msg->msg.win.wParam) {
 	case ID_FILE_EXITAPP:
 		Game::GetGame()->QuitApp();
+
 		break;
 	case ID_FILE_RESTARTGAME:
 		Game::GetGame()->RestartGame();
+
+		Game::GetGame()->SetLastTickTimeNow();
 		break;
 
 	case ID_GAME_GAMECONTROL:
@@ -84,6 +87,8 @@ void Input::HandleWinMenuEvents(SDL_Event* Event)
 			"Game Controls",
 			"WASD - Move Ship\nSpace - Fire Weapon"
 		);
+
+		Game::GetGame()->SetLastTickTimeNow();
 
 		break;
 
@@ -93,6 +98,9 @@ void Input::HandleWinMenuEvents(SDL_Event* Event)
 			"Enter Eclips Game is an SDL2-based C++ 2D Game engine creaated by Kazunori Masuda in 2024"
 
 		);
+
+		Game::GetGame()->SetLastTickTimeNow();
+
 		break;
 
 	default:
